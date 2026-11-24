@@ -1,8 +1,35 @@
+---
+title: EyeTrace AI
+emoji: 👁️
+colorFrom: blue
+colorTo: cyan
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+
 # EyeTrace AI
 
 **Explainable ASD Eye-Tracking Scanpath Classification**
 
 > ⚠️ **Academic research project only. Not a clinical diagnostic tool.**
+
+---
+
+## Deploying to Hugging Face Spaces (Free 16GB RAM Tier)
+
+EyeTrace AI is pre-configured for instant 1-click Docker deployment to **Hugging Face Spaces**:
+
+1. Go to [Hugging Face Spaces](https://huggingface.co/new-space).
+2. Choose a name (e.g. `eyetrace-ai`), select license (e.g. `mit`), and choose **Space SDK: Docker** (Blank).
+3. Under Hardware, select the default **Free CPU (2 vCPU, 16 GB RAM)**.
+4. In your terminal at `c:\Users\pranav\Desktop\ASD`, link and push:
+   ```bash
+   git remote add space https://huggingface.co/spaces/<YOUR-USERNAME>/<YOUR-SPACE-NAME>
+   git push space master:main
+   ```
+5. Hugging Face will automatically build the multi-stage Docker container (compiling the React frontend and launching the FastAPI inference backend) and publish your live web application!
 
 ---
 
