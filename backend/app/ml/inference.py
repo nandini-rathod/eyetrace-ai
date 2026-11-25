@@ -56,7 +56,7 @@ def extract_features(mobilenet_model, img_preprocessed: np.ndarray) -> np.ndarra
     Run MobileNet with pooling='avg' to get 1024-dim feature vector.
     Returns shape (1, 1024).
     """
-    features = mobilenet_model.predict(img_preprocessed, verbose=0)
+    features = mobilenet_model(img_preprocessed, training=False).numpy()
     logger.debug(f"MobileNet features shape: {features.shape}")
     return features
 

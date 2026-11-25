@@ -54,19 +54,21 @@ def compute_occlusion_heatmap(
     original_rgb: np.ndarray,
     asd_class_idx: int = 1,
     patch_size: int = 32,
-    stride: int = 16,
+    stride: int = 32,
 ) -> str:
     """
     Occlusion sensitivity: slide a neutral patch over the image, re-run inference
-    in a single batched pass for high performance.
+    in micro-batches to strictly respect free-tier memory constraints (512MB RAM).
     """
+    import gc
+
     H, W = original_rgb.shape[:2]
     score_map = np.zeros((H, W), dtype=np.float32)
     count_map = np.zeros((H, W), dtype=np.float32)
 
     # Baseline score (no occlusion)
     base_input = _prepare_image_for_model(original_rgb)
-    base_features = mobilenet_model.predict(base_input, verbose=0)
+    base_features = mobilenet_model(base_input, training=False).numpy()
     base_pca = pca.transform(base_features)
     base_proba = stacking_clf.predict_proba(base_pca)[0][asd_class_idx]
 
@@ -83,8 +85,14 @@ def compute_occlusion_heatmap(
             occ_inputs.append(_prepare_image_for_model(occluded)[0])
 
     if occ_inputs:
-        occ_batch = np.stack(occ_inputs, axis=0)  # (N, 224, 224, 3)
-        occ_features = mobilenet_model.predict(occ_batch, batch_size=32, verbose=0)
+        BATCH_SIZE = 16
+        occ_features_list = []
+        for i in range(0, len(occ_inputs), BATCH_SIZE):
+            chunk = np.stack(occ_inputs[i:i+BATCH_SIZE], axis=0)
+            chunk_feats = mobilenet_model(chunk, training=False).numpy()
+            occ_features_list.append(chunk_feats)
+        
+        occ_features = np.vstack(occ_features_list)
         occ_pca = pca.transform(occ_features)
         occ_probas = stacking_clf.predict_proba(occ_pca)[:, asd_class_idx]
 
@@ -92,6 +100,9 @@ def compute_occlusion_heatmap(
             importance = base_proba - occ_proba
             score_map[y:y+patch_size, x:x+patch_size] += importance
             count_map[y:y+patch_size, x:x+patch_size] += 1
+            
+        del occ_inputs, occ_features_list, occ_features, occ_pca
+        gc.collect()
 
     count_map = np.maximum(count_map, 1)
     heatmap = score_map / count_map
@@ -130,7 +141,7 @@ def compute_channel_ablation(
         ablated_inputs.append(_prepare_image_for_model(ablated)[0])
 
     ablated_batch = np.stack(ablated_inputs, axis=0)  # (3, 224, 224, 3)
-    feats = mobilenet_model.predict(ablated_batch, batch_size=3, verbose=0)
+    feats = mobilenet_model(ablated_batch, training=False).numpy()
     pca_feats = pca.transform(feats)
     probas = stacking_clf.predict_proba(pca_feats)[:, asd_class_idx]
 
