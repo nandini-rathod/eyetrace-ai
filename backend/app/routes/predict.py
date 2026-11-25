@@ -125,8 +125,8 @@ async def predict(image: UploadFile = File(...)):
             state.stacking_clf,
             original_rgb,
             asd_class_idx=asd_class_idx,
-            patch_size=32,
-            stride=32,
+            patch_size=56,
+            stride=56,
         )
     except Exception as e:
         logger.warning(f"Occlusion heatmap failed: {e}")
