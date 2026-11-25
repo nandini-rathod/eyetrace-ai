@@ -3,7 +3,7 @@ import sys
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.text import PP_ALIGN
 from pptx.enum.shapes import MSO_SHAPE
 
 def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
@@ -18,7 +18,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     CYAN_ACCENT = RGBColor(0, 168, 204)    # Exact vibrant cyan from user image
     LIGHT_CYAN = RGBColor(56, 189, 248)    # Sky cyan
     WHITE = RGBColor(255, 255, 255)
-    OFF_WHITE = RGBColor(241, 245, 249)    # Slate 100
     LIGHT_BG = RGBColor(248, 250, 252)     # Slate 50 content background
     CARD_BG = RGBColor(255, 255, 255)      # Pure white card
     CARD_BORDER = RGBColor(226, 232, 240)  # Slate 200 border
@@ -31,7 +30,7 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
 
     static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backend", "static")
 
-    def add_card(slide, left, top, width, height, bg_color=CARD_BG, border_color=CARD_BORDER, corner_radius=None):
+    def add_card(slide, left, top, width, height, bg_color=CARD_BG, border_color=CARD_BORDER):
         shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
         shape.fill.solid()
         shape.fill.fore_color.rgb = bg_color
@@ -43,7 +42,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         return shape
 
     def add_header(slide, title_text, category="EYE-TRACKING RESEARCH & MACHINE LEARNING"):
-        # Header category tracker
         cat_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.4), Inches(11.5), Inches(0.3))
         tf_cat = cat_box.text_frame
         tf_cat.word_wrap = True
@@ -54,7 +52,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         p_cat.font.color.rgb = BLUE_PRIMARY
         p_cat.font.name = "Arial"
 
-        # Main slide title
         title_box = slide.shapes.add_textbox(Inches(0.8), Inches(0.68), Inches(11.5), Inches(0.65))
         tf_t = title_box.text_frame
         tf_t.word_wrap = True
@@ -65,7 +62,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         p_t.font.color.rgb = TEXT_DARK
         p_t.font.name = "Arial"
 
-        # Subtle divider line
         line = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(1.35), Inches(11.733), Inches(0.02))
         line.fill.solid()
         line.fill.fore_color.rgb = RGBColor(226, 232, 240)
@@ -80,7 +76,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     bg1.fill.fore_color.rgb = DARK_NAVY
     bg1.line.fill.background()
 
-    # Title & Subtitle box (Centered vertically & horizontally in upper half)
     tb_title = slide1.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(11.333), Inches(2.2))
     tf1 = tb_title.text_frame
     tf1.word_wrap = True
@@ -106,12 +101,10 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     p3 = tf1.add_paragraph()
     p3.text = "& Feature Reduction"
     p3.font.size = Pt(26)
-    p3.font.bold = False
     p3.font.color.rgb = WHITE
     p3.font.name = "Georgia"
     p3.alignment = PP_ALIGN.CENTER
 
-    # Team Members Block
     tb_team = slide1.shapes.add_textbox(Inches(2.5), Inches(4.5), Inches(8.333), Inches(1.4))
     tf_team = tb_team.text_frame
     tf_team.word_wrap = True
@@ -121,10 +114,8 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     p_tm_header.font.size = Pt(15)
     p_tm_header.font.bold = True
     p_tm_header.font.color.rgb = CYAN_ACCENT
-    p_tm_header.font.name = "Arial"
     p_tm_header.alignment = PP_ALIGN.CENTER
 
-    # Add member details
     members = [
         ("Pranav Priy", "2023UGCS046"),
         ("Tanisha Jain", "2023UGCS122"),
@@ -135,11 +126,9 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         pm.text = f"{name}   {roll}"
         pm.font.size = Pt(14)
         pm.font.color.rgb = WHITE
-        pm.font.name = "Arial"
         pm.alignment = PP_ALIGN.CENTER
         pm.space_after = Pt(2)
 
-    # Supervisor Block
     tb_sup = slide1.shapes.add_textbox(Inches(2.5), Inches(6.2), Inches(8.333), Inches(0.8))
     tf_sup = tb_sup.text_frame
     tf_sup.word_wrap = True
@@ -149,7 +138,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     p_sup.font.size = Pt(15)
     p_sup.font.bold = True
     p_sup.font.color.rgb = CYAN_ACCENT
-    p_sup.font.name = "Arial"
     p_sup.alignment = PP_ALIGN.CENTER
 
     # =========================================================================
@@ -158,7 +146,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     slide2 = prs.slides.add_slide(blank_layout)
     add_header(slide2, "Clinical Motivation & The Autism Diagnostic Crisis", category="01. INTRODUCTION & PROBLEM STATEMENT")
 
-    # Left Column: The Problem (Challenges)
     card_w = Inches(5.7)
     add_card(slide2, Inches(0.8), Inches(1.6), card_w, Inches(5.4), bg_color=WHITE, border_color=CARD_BORDER)
     tb_prob = slide2.shapes.add_textbox(Inches(1.0), Inches(1.8), card_w - Inches(0.4), Inches(5.0))
@@ -192,7 +179,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         pd.font.color.rgb = TEXT_MUTED
         pd.space_after = Pt(10)
 
-    # Right Column: The Proposed Eye-Tracking Solution
     add_card(slide2, Inches(6.8), Inches(1.6), card_w, Inches(5.4), bg_color=LIGHT_BG, border_color=BLUE_PRIMARY)
     tb_sol = slide2.shapes.add_textbox(Inches(7.0), Inches(1.8), card_w - Inches(0.4), Inches(5.0))
     tf_s = tb_sol.text_frame
@@ -231,7 +217,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     slide3 = prs.slides.add_slide(blank_layout)
     add_header(slide3, "Dataset Description & Input Preprocessing", category="02. DATA ENGINEERING")
 
-    # Left Card: Dataset metrics
     add_card(slide3, Inches(0.8), Inches(1.6), Inches(4.5), Inches(5.4))
     tb_d = slide3.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(4.1), Inches(5.0))
     tf_ds = tb_d.text_frame
@@ -262,7 +247,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         pdd.font.color.rgb = TEXT_MUTED
         pdd.space_after = Pt(6)
 
-    # Right Card: Preprocessing Pipeline & Embedded Image
     add_card(slide3, Inches(5.6), Inches(1.6), Inches(6.9), Inches(5.4))
     tb_pr = slide3.shapes.add_textbox(Inches(5.8), Inches(1.8), Inches(6.5), Inches(2.2))
     tf_pr = tb_pr.text_frame
@@ -288,7 +272,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         ps.font.color.rgb = TEXT_DARK
         ps.space_after = Pt(3)
 
-    # Embed preprocessed comparison image
     raw_img_path = os.path.join(static_dir, "02_preprocessing_comparison.png")
     if os.path.exists(raw_img_path):
         slide3.shapes.add_picture(raw_img_path, Inches(5.8), Inches(3.9), width=Inches(6.5))
@@ -299,7 +282,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     slide4 = prs.slides.add_slide(blank_layout)
     add_header(slide4, "Feature Extraction (MobileNet) & PCA Dimensionality Reduction", category="03. FEATURE ENGINEERING")
 
-    # Left: MobileNet Feature Extraction
     add_card(slide4, Inches(0.8), Inches(1.6), Inches(5.6), Inches(5.4))
     tb_m = slide4.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(5.2), Inches(5.0))
     tf_m = tb_m.text_frame
@@ -329,7 +311,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         pmd.font.color.rgb = TEXT_MUTED
         pmd.space_after = Pt(8)
 
-    # Right: PCA Dimensionality Reduction
     add_card(slide4, Inches(6.8), Inches(1.6), Inches(5.7), Inches(5.4))
     tb_pca = slide4.shapes.add_textbox(Inches(7.0), Inches(1.8), Inches(5.3), Inches(2.2))
     tf_pca = tb_pca.text_frame
@@ -354,7 +335,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         ppf.font.color.rgb = TEXT_DARK
         ppf.space_after = Pt(4)
 
-    # Embed PCA Variance plot
     pca_img_path = os.path.join(static_dir, "05_pca_variance.png")
     if os.path.exists(pca_img_path):
         slide4.shapes.add_picture(pca_img_path, Inches(7.0), Inches(4.0), width=Inches(5.3))
@@ -410,7 +390,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         pdesc.font.color.rgb = TEXT_MUTED
         pdesc.space_after = Pt(8)
 
-    # Bottom Pipeline Flow Ribbon
     add_card(slide5, Inches(0.8), Inches(5.9), Inches(11.733), Inches(1.1), bg_color=DARK_NAVY, border_color=None)
     tb_rib = slide5.shapes.add_textbox(Inches(1.0), Inches(5.95), Inches(11.333), Inches(1.0))
     tf_rib = tb_rib.text_frame
@@ -434,7 +413,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     slide6 = prs.slides.add_slide(blank_layout)
     add_header(slide6, "Experimental Results & Benchmark Comparison", category="05. RESULTS & EVALUATION")
 
-    # Left: Results Table Card
     add_card(slide6, Inches(0.8), Inches(1.6), Inches(6.8), Inches(5.4))
     tb_tbl = slide6.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(6.4), Inches(5.0))
     tf_tbl = tb_tbl.text_frame
@@ -474,14 +452,12 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
             p_row.font.color.rgb = TEXT_MUTED
         p_row.space_after = Pt(6)
 
-    # Key takeaways
     p_take = tf_tbl.add_paragraph()
     p_take.text = "\nKey Takeaway: The Stacking Ensemble achieves a superior 93.92% Specificity, effectively minimizing false-positive ASD referrals while retaining 90.86% clinical sensitivity."
     p_take.font.size = Pt(10.5)
     p_take.font.color.rgb = SUCCESS_COLOR
     p_take.font.bold = True
 
-    # Right: Embedded Confusion Matrix / Model comparison plot
     add_card(slide6, Inches(7.8), Inches(1.6), Inches(4.7), Inches(5.4))
     tb_plt = slide6.shapes.add_textbox(Inches(8.0), Inches(1.8), Inches(4.3), Inches(0.4))
     tf_plt = tb_plt.text_frame
@@ -496,170 +472,160 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         slide6.shapes.add_picture(cm_path, Inches(8.0), Inches(2.4), width=Inches(4.3))
 
     # =========================================================================
-    # SLIDE 7: Explainable AI (XAI) Framework
+    # SLIDE 7: LIVE IMPLEMENTATION (Real Working Results from App Screenshot)
     # =========================================================================
     slide7 = prs.slides.add_slide(blank_layout)
-    add_header(slide7, "Explainable AI (XAI): Transparent Clinical Decision Support", category="06. EXPLAINABILITY & TRUST")
+    add_header(slide7, "Live Platform Implementation: Diagnostic Classification", category="06. REAL WORKING SYSTEM")
 
-    xai_cols = [
-        ("XAI METHOD 1", "Occlusion Sensitivity Mapping", "Spatial Heatmap Attribution",
-         "A neutral gray patch slides across the image to measure changes in ASD probability. Image regions whose occlusion causes significant prediction drops are highlighted in warm colors (red/yellow).",
-         "Clinicians can visually verify whether the model is focusing on legitimate gaze path anomalies rather than background image artifacts."),
-        ("XAI METHOD 2", "Kinematic Channel Ablation", "Velocity, Acceleration & Jerk",
-         "The eye-tracking RGB scanpath encodes physical kinematics: Red (Gaze Velocity), Green (Acceleration), Blue (Jerk).",
-         "By selectively zeroing each channel, the system measures the exact drop (Δ%) in model confidence, revealing the kinematic drivers of the diagnosis.")
+    # Left: Explanation of Real Test Run
+    add_card(slide7, Inches(0.8), Inches(1.6), Inches(4.8), Inches(5.4))
+    tb_lr = slide7.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(4.4), Inches(5.0))
+    tf_lr = tb_lr.text_frame
+    tf_lr.word_wrap = True
+
+    p_lrh = tf_lr.paragraphs[0]
+    p_lrh.text = "PATIENT SCANPATH INTAKE & PREDICTION"
+    p_lrh.font.size = Pt(11)
+    p_lrh.font.bold = True
+    p_lrh.font.color.rgb = BLUE_PRIMARY
+    p_lrh.space_after = Pt(8)
+
+    lr_points = [
+        ("Live Test Sample", "Evaluated scanpath test file TS010_19.png with unique tracking ID 0224b2a8."),
+        ("High-Confidence ASD Detection", "Stacking Meta-Learner output an ASD Probability of 98.5% with high certainty (Non-ASD Probability: 1.5%)."),
+        ("Synchronous Pipeline Execution", "Processed the input image through 224×224 scaling, Gaussian blur, MobileNet 1024-D feature extraction, and PCA 250 components in <400 ms."),
+        ("Doctor-Facing Feedback", "Clear colored status indicators and progress bars prevent misinterpretation of probabilistic scores.")
     ]
-    col_w2 = Inches(5.7)
-    for i, (tag, title, sub, desc1, desc2) in enumerate(xai_cols):
-        left_p = Inches(0.8 + i * 6.0)
-        add_card(slide7, left_p, Inches(1.6), col_w2, Inches(5.4))
-        tb_x = slide7.shapes.add_textbox(left_p + Inches(0.2), Inches(1.8), col_w2 - Inches(0.4), Inches(5.0))
-        tfx = tb_x.text_frame
-        tfx.word_wrap = True
+    for lh, ld in lr_points:
+        plh = tf_lr.add_paragraph()
+        plh.text = "• " + lh
+        plh.font.size = Pt(12)
+        plh.font.bold = True
+        plh.font.color.rgb = TEXT_DARK
+        pld = tf_lr.add_paragraph()
+        pld.text = "   " + ld
+        pld.font.size = Pt(10.5)
+        pld.font.color.rgb = TEXT_MUTED
+        pld.space_after = Pt(6)
 
-        ptag = tfx.paragraphs[0]
-        ptag.text = tag
-        ptag.font.size = Pt(11)
-        ptag.font.bold = True
-        ptag.font.color.rgb = BLUE_PRIMARY
+    # Right: Embedded Real UI Screenshot
+    add_card(slide7, Inches(5.8), Inches(1.6), Inches(6.7), Inches(5.4), bg_color=DARK_NAVY, border_color=CYAN_ACCENT)
+    tb_uicap = slide7.shapes.add_textbox(Inches(6.0), Inches(1.75), Inches(6.3), Inches(0.4))
+    tf_uicap = tb_uicap.text_frame
+    p_uic = tf_uicap.paragraphs[0]
+    p_uic.text = "ACTUAL SYSTEM SCREENSHOT (RUNNING AT LOCALHOST:5173)"
+    p_uic.font.size = Pt(10.5)
+    p_uic.font.bold = True
+    p_uic.font.color.rgb = CYAN_ACCENT
 
-        ptitle = tfx.add_paragraph()
-        ptitle.text = title
-        ptitle.font.size = Pt(16)
-        ptitle.font.bold = True
-        ptitle.font.color.rgb = TEXT_DARK
-
-        psub = tfx.add_paragraph()
-        psub.text = sub
-        psub.font.size = Pt(12)
-        psub.font.bold = True
-        psub.font.color.rgb = CYAN_ACCENT
-        psub.space_after = Pt(12)
-
-        pd1 = tfx.add_paragraph()
-        pd1.text = "• " + desc1
-        pd1.font.size = Pt(11.5)
-        pd1.font.color.rgb = TEXT_DARK
-        pd1.space_after = Pt(10)
-
-        pd2 = tfx.add_paragraph()
-        pd2.text = "• " + desc2
-        pd2.font.size = Pt(11.5)
-        pd2.font.color.rgb = TEXT_MUTED
+    live_screen1 = os.path.join(static_dir, "crop_classification.png")
+    if os.path.exists(live_screen1):
+        slide7.shapes.add_picture(live_screen1, Inches(6.0), Inches(2.2), width=Inches(6.3))
 
     # =========================================================================
-    # SLIDE 8: The EyeTrace AI Web Platform Architecture
+    # SLIDE 8: Explainable AI in Action (Real Heatmap + Channel Ablation)
     # =========================================================================
     slide8 = prs.slides.add_slide(blank_layout)
-    add_header(slide8, "The EyeTrace AI Full-Stack Web Platform", category="07. SYSTEM IMPLEMENTATION")
+    add_header(slide8, "Explainable AI in Action: Heatmap & Channel Ablation", category="07. EXPLAINABILITY RESULTS")
 
-    add_card(slide8, Inches(0.8), Inches(1.6), Inches(5.7), Inches(5.4))
-    tb_fe = slide8.shapes.add_textbox(Inches(1.0), Inches(1.8), Inches(5.3), Inches(5.0))
-    tf_fe = tb_fe.text_frame
-    tf_fe.word_wrap = True
+    # Left: Heatmap
+    add_card(slide8, Inches(0.8), Inches(1.6), Inches(5.7), Inches(5.4), bg_color=DARK_NAVY, border_color=CYAN_ACCENT)
+    tb_hm = slide8.shapes.add_textbox(Inches(1.0), Inches(1.75), Inches(5.3), Inches(0.5))
+    tf_hm = tb_hm.text_frame
+    p_hm = tf_hm.paragraphs[0]
+    p_hm.text = "OCCLUSION SENSITIVITY HEATMAP (REAL OUTPUT)"
+    p_hm.font.size = Pt(11)
+    p_hm.font.bold = True
+    p_hm.font.color.rgb = CYAN_ACCENT
 
-    p_feh = tf_fe.paragraphs[0]
-    p_feh.text = "FRONTEND CLIENT (REACT 19 + VITE + TAILWIND)"
-    p_feh.font.size = Pt(11)
-    p_feh.font.bold = True
-    p_feh.font.color.rgb = BLUE_PRIMARY
-    p_feh.space_after = Pt(8)
+    live_hm = os.path.join(static_dir, "crop_heatmap.png")
+    if os.path.exists(live_hm):
+        slide8.shapes.add_picture(live_hm, Inches(1.0), Inches(2.3), width=Inches(5.3))
 
-    fe_features = [
-        ("Instant Scanpath Upload & Validation", "Drag-and-drop zone with instant client-side thumbnail rendering and resolution checks."),
-        ("Animated Step-by-Step Pipeline Progress", "Displays real-time inference progress from preprocessing to feature extraction and classification."),
-        ("Interactive Diagnostic Dashboard", "Displays high-contrast risk classification, calibrated probability meter, and interactive kinematic breakdown."),
-        ("Medical Accessibility & Dark Mode", "High-contrast clinical UI designed for laboratory environments and desktop/tablet use.")
-    ]
-    for fh, fd in fe_features:
-        pfh = tf_fe.add_paragraph()
-        pfh.text = "• " + fh
-        pfh.font.size = Pt(12)
-        pfh.font.bold = True
-        pfh.font.color.rgb = TEXT_DARK
-        pfd = tf_fe.add_paragraph()
-        pfd.text = "   " + fd
-        pfd.font.size = Pt(10.5)
-        pfd.font.color.rgb = TEXT_MUTED
-        pfd.space_after = Pt(6)
+    tb_hmtxt = slide8.shapes.add_textbox(Inches(1.0), Inches(5.5), Inches(5.3), Inches(1.3))
+    tf_ht = tb_hmtxt.text_frame
+    tf_ht.word_wrap = True
+    p_ht1 = tf_ht.paragraphs[0]
+    p_ht1.text = "• Warm (red/yellow) center reveals the primary focal gaze cluster that heavily drove the ASD classification."
+    p_ht1.font.size = Pt(10.5)
+    p_ht1.font.color.rgb = WHITE
 
-    # Right: Backend Server Architecture
-    add_card(slide8, Inches(6.8), Inches(1.6), Inches(5.7), Inches(5.4))
-    tb_be = slide8.shapes.add_textbox(Inches(7.0), Inches(1.8), Inches(5.3), Inches(5.0))
-    tf_be = tb_be.text_frame
-    tf_be.word_wrap = True
+    # Right: Channel Ablation
+    add_card(slide8, Inches(6.8), Inches(1.6), Inches(5.7), Inches(5.4), bg_color=DARK_NAVY, border_color=LIGHT_CYAN)
+    tb_ab = slide8.shapes.add_textbox(Inches(7.0), Inches(1.75), Inches(5.3), Inches(0.5))
+    tf_ab = tb_ab.text_frame
+    p_ab = tf_ab.paragraphs[0]
+    p_ab.text = "CHANNEL ABLATION ANALYSIS (REAL OUTPUT)"
+    p_ab.font.size = Pt(11)
+    p_ab.font.bold = True
+    p_ab.font.color.rgb = LIGHT_CYAN
 
-    p_beh = tf_be.paragraphs[0]
-    p_beh.text = "BACKEND SERVER (FASTAPI + DOCKER + ML ENGINE)"
-    p_beh.font.size = Pt(11)
-    p_beh.font.bold = True
-    p_beh.font.color.rgb = BLUE_PRIMARY
-    p_beh.space_after = Pt(8)
+    live_ab = os.path.join(static_dir, "crop_ablation.png")
+    if os.path.exists(live_ab):
+        slide8.shapes.add_picture(live_ab, Inches(7.0), Inches(2.3), width=Inches(5.3))
 
-    be_features = [
-        ("FastAPI Asynchronous REST API", "High-throughput asynchronous endpoints (/api/v1/predict, /api/health) running on Uvicorn."),
-        ("Sub-Second Inference Speed", "Optimized MobileNet forward passes and PCA transformations complete in <400 ms."),
-        ("Micro-Batch Memory Optimization", "Vectorized 16-patch explainability algorithm designed to run within strict 512 MB memory footprints."),
-        ("Multi-Stage Containerization", "Docker multi-stage build uniting React compilation and Python inference inside one deployable container.")
-    ]
-    for bh, bd in be_features:
-        pbh = tf_be.add_paragraph()
-        pbh.text = "✔ " + bh
-        pbh.font.size = Pt(12)
-        pbh.font.bold = True
-        pbh.font.color.rgb = TEXT_DARK
-        pbd = tf_be.add_paragraph()
-        pbd.text = "   " + bd
-        pbd.font.size = Pt(10.5)
-        pbd.font.color.rgb = TEXT_MUTED
-        pbd.space_after = Pt(6)
+    tb_abtxt = slide8.shapes.add_textbox(Inches(7.0), Inches(5.5), Inches(5.3), Inches(1.3))
+    tf_abt = tb_abtxt.text_frame
+    tf_abt.word_wrap = True
+    p_abt1 = tf_abt.paragraphs[0]
+    p_abt1.text = "• Individually zeros Velocity, Acceleration, and Jerk channels to measure exact diagnostic importance (Δ%)."
+    p_abt1.font.size = Pt(10.5)
+    p_abt1.font.color.rgb = WHITE
 
     # =========================================================================
-    # SLIDE 9: Clinical Safety Protocol & Workflow Integration
+    # SLIDE 9: RGB Kinematic Channels & Clinical Safety Protocol
     # =========================================================================
     slide9 = prs.slides.add_slide(blank_layout)
-    add_header(slide9, "Clinical Safety Protocol & Healthcare Integration", category="08. ETHICS & CLINICAL WORKFLOW")
+    add_header(slide9, "RGB Kinematic Channels & Clinical Safety Protocol", category="08. KINEMATICS & SAFETY")
 
-    safety_cards = [
+    # Top: Embedded Kinematic Channels
+    add_card(slide9, Inches(0.8), Inches(1.6), Inches(11.733), Inches(3.2), bg_color=DARK_NAVY, border_color=CYAN_ACCENT)
+    tb_rgb_title = slide9.shapes.add_textbox(Inches(1.0), Inches(1.7), Inches(11.333), Inches(0.4))
+    tf_rt = tb_rgb_title.text_frame
+    p_rt = tf_rt.paragraphs[0]
+    p_rt.text = "RGB SCANPATH KINEMATIC DECOMPOSITION: VELOCITY (RED) • ACCELERATION (GREEN) • JERK (BLUE)"
+    p_rt.font.size = Pt(11)
+    p_rt.font.bold = True
+    p_rt.font.color.rgb = CYAN_ACCENT
+
+    live_rgb = os.path.join(static_dir, "crop_rgb_channels.png")
+    if os.path.exists(live_rgb):
+        slide9.shapes.add_picture(live_rgb, Inches(2.5), Inches(2.1), width=Inches(8.333))
+
+    # Bottom 3 Safety Cards
+    bot_w = Inches(3.75)
+    bot_cards = [
         ("DECISION THRESHOLDS", "Risk Stratification",
-         ["Probability > 75%: High confidence ASD gaze marker; prioritize for expedited specialist evaluation.",
-          "Probability 50–75%: Moderate risk pattern; repeat scanpath or administer secondary screener.",
-          "Probability < 50%: Neurotypical visual exploration pattern indicated."]),
-        ("CLINICAL BOUNDARIES", "Academic & Screening Scope",
-         ["Strict Decision-Support Role: The platform explicitly acts as an objective screening assistant, NOT an autonomous diagnostic tool.",
-          "Clinical Multidisciplinary Requirement: Final diagnosis strictly requires formal clinical evaluation (ADOS-2, pediatric developmental assessment).",
-          "Ethical Compliance: All patient images processed in-memory with zero cloud storage of identifying biometric data."]),
-        ("FAULT TOLERANCE", "System Reliability & Fail-Safe",
-         ["Real-Time Model Health Checks: GET /api/health continuously verifies integrity of PCA, StackingClassifier, and MobileNet weights.",
-          "Graceful Degradation: If visual heatmap generation encounters timeout limits, classification and ablation scores still deliver without crashing.",
-          "Zero Cloud Dependency: Full standalone local offline execution available for remote hospitals."])
+         ">75% High ASD Risk (flag for ADOS-2); 50-75% Moderate Risk (secondary test recommended); <50% Neurotypical."),
+        ("CLINICAL BOUNDARIES", "Academic & Screening Role",
+         "Acts strictly as an assistive screening aid, not an autonomous doctor replacement. Final diagnosis requires multidisciplinary assessment."),
+        ("DATA PRIVACY", "Zero Persistent Biometric Storage",
+         "All scanpaths processed in-memory during inference with immediate memory clearance to protect pediatric patient privacy.")
     ]
-    for i, (stag, stitle, sposts) in enumerate(safety_cards):
-        sp_x = Inches(0.8 + i * 4.04)
-        add_card(slide9, sp_x, Inches(1.6), card_w3, Inches(5.4))
-        tb_s = slide9.shapes.add_textbox(sp_x + Inches(0.2), Inches(1.8), card_w3 - Inches(0.4), Inches(5.0))
-        tfs = tb_s.text_frame
-        tfs.word_wrap = True
+    for i, (btag, btitle, bdesc) in enumerate(bot_cards):
+        bx = Inches(0.8 + i * 3.99)
+        add_card(slide9, bx, Inches(4.95), bot_w, Inches(2.05))
+        tb_b = slide9.shapes.add_textbox(bx + Inches(0.15), Inches(5.05), bot_w - Inches(0.3), Inches(1.85))
+        tf_bc = tb_b.text_frame
+        tf_bc.word_wrap = True
 
-        pst = tfs.paragraphs[0]
-        pst.text = stag
-        pst.font.size = Pt(11)
-        pst.font.bold = True
-        pst.font.color.rgb = BLUE_PRIMARY
+        pbt = tf_bc.paragraphs[0]
+        pbt.text = btag
+        pbt.font.size = Pt(10)
+        pbt.font.bold = True
+        pbt.font.color.rgb = BLUE_PRIMARY
 
-        psth = tfs.add_paragraph()
-        psth.text = stitle
-        psth.font.size = Pt(15)
-        psth.font.bold = True
-        psth.font.color.rgb = TEXT_DARK
-        psth.space_after = Pt(10)
+        pbth = tf_bc.add_paragraph()
+        pbth.text = btitle
+        pbth.font.size = Pt(12)
+        pbth.font.bold = True
+        pbth.font.color.rgb = TEXT_DARK
+        pbth.space_after = Pt(3)
 
-        for pt in sposts:
-            ppt = tfs.add_paragraph()
-            ppt.text = "• " + pt
-            ppt.font.size = Pt(10.5)
-            ppt.font.color.rgb = TEXT_MUTED
-            ppt.space_after = Pt(8)
+        pbd = tf_bc.add_paragraph()
+        pbd.text = bdesc
+        pbd.font.size = Pt(10)
+        pbd.font.color.rgb = TEXT_MUTED
 
     # =========================================================================
     # SLIDE 10: Conclusion & Future Roadmap
@@ -670,7 +636,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
     bg10.fill.fore_color.rgb = DARK_NAVY
     bg10.line.fill.background()
 
-    # Left Card: Summary of Achievements
     add_card(slide10, Inches(0.8), Inches(1.5), Inches(5.6), Inches(5.3), bg_color=NAVY_CARD, border_color=CYAN_ACCENT)
     tb_ach = slide10.shapes.add_textbox(Inches(1.0), Inches(1.7), Inches(5.2), Inches(4.9))
     tf_ach = tb_ach.text_frame
@@ -703,7 +668,6 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         prd.font.color.rgb = TEXT_LIGHT_MUTED
         prd.space_after = Pt(8)
 
-    # Right Card: Future Scope
     add_card(slide10, Inches(6.8), Inches(1.5), Inches(5.7), Inches(5.3), bg_color=NAVY_CARD, border_color=LIGHT_CYAN)
     tb_fut = slide10.shapes.add_textbox(Inches(7.0), Inches(1.7), Inches(5.3), Inches(4.9))
     tf_fut = tb_fut.text_frame
@@ -737,7 +701,7 @@ def create_deck(filename="ASD_EyeTracking_Presentation.pptx"):
         pfd.space_after = Pt(8)
 
     prs.save(filename)
-    print(f"Professional 10-slide presentation successfully generated at: {filename}")
+    print(f"Presentation successfully updated with embedded screenshots at: {filename}")
 
 if __name__ == "__main__":
     out_file = sys.argv[1] if len(sys.argv) > 1 else "ASD_EyeTracking_Presentation.pptx"
